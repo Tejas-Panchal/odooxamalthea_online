@@ -23,6 +23,11 @@ const LoginPage = () => {
         <LoginForm onLogin={handleLogin} />
         {error && <p className="mt-4 text-red-500">{error}</p>}
         <p className="mt-4">
+          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot your password?
+          </Link>
+        </p>
+        <p className="mt-4">
           First time user?{' '}
           <Link to="/signup" className="text-blue-500 hover:underline">
             Create a Company Account

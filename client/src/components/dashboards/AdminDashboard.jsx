@@ -11,7 +11,12 @@ import CircleStackIcon from '../icons/CircleStackIcon';
 import CurrencyDollarIcon from '../icons/CurrencyDollarIcon';
 import AllExpensesView from '../../components/admin/AllExpensesView';
 
+<<<<<<< HEAD
 // Import other components
+=======
+import ManagerExpenseWidget from '../admin/ManagerExpenseWidget';
+// Other component imports
+>>>>>>> f10a410f1aef957378d4c7514965b62e3d83ca89
 import KpiCard from '../common/KpiCard';
 import Card from '../common/Card';
 import Button from '../common/Button';
@@ -131,6 +136,10 @@ const AdminDashboard = () => {
           >
             {/* Display the summary list of workflows */}
             <WorkflowListSummary />
+          </Card>
+           {/* ADD THE NEW WIDGET HERE */}
+          <Card title="Team Expense Totals">
+            <ManagerExpenseWidget />
           </Card>
         </div>
       </div>

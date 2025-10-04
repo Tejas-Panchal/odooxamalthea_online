@@ -1,10 +1,11 @@
 export { default as CheckCircleIcon } from './CheckCircleIcon';
 export { default as CircleStackIcon } from './CircleStackIcon';
 export { default as ClockIcon } from './ClockIcon';
-export { default as CurrencyDollarIcon } from './CurrencyDollarIcon';
+// export { default as CurrencyDollarIcon } from './CurrencyDollarIcon';
 export { default as DocumentMagnifyingGlassIcon } from './DocumentMagnifyingGlassIcon';
 export { default as DocumentPlusIcon } from './DocumentPlusIcon';
 export { default as UploadIcon } from './UploadIcon';
 export { default as UsersIcon } from './UsersIcon';
 export { default as XCircleIcon } from './XCircleIcon';
 export { default as XMarkIcon } from './XMarkIcon';
+export { default as DownloadIcon } from './DownloadIcon'; 
