@@ -33,7 +33,16 @@ odooExpenses is a web-based application built primarily with JavaScript designed
 ```bash
 git clone https://github.com/Tejas-Panchal/odooxamalthea_online.git
 cd odooxamalthea_online
-npm install
+```
+```bash
+cd server
+npm i
+npm run dev
+```
+```bash
+cd client
+npm i
+npm run dev
 ```
 
 ### Running the App
