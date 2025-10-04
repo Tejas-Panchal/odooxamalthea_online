@@ -17,9 +17,9 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/" element={<Navigate to="/dashboard" />} />
 
-          <Route element={<PrivateRoute />}>
+ 
             <Route path="/dashboard" element={<DashboardPage />} />
-          </Route>
+          
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

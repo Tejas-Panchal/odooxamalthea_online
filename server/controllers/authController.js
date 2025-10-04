@@ -3,6 +3,7 @@ const Company = require('../models/Company');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 // Helper function to generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,13 +24,13 @@ exports.signup = async (req, res) => {
     if (userCount > 0) {
       return res.status(403).json({ msg: 'Public signup is disabled. An admin must create new accounts.' });
     }
-
+    console.log("step 1")
     // 1. Create the company
     const newCompany = await Company.create({
       name: companyName,
       defaultCurrency: currency,
     });
-
+    console.log("step 2")
     // 2. Create the Admin user
     const user = new User({
       name,
@@ -38,12 +39,12 @@ exports.signup = async (req, res) => {
       role: 'Admin',
       company: newCompany._id,
     });
-
+    console.log("step 3")
     // Hash password before saving
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
-
+    console.log("step 4")
     // 3. Generate token and send response
     const token = generateToken(user._id);
     res.status(201).json({
@@ -73,12 +74,15 @@ exports.login = async (req, res) => {
     if (!user) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
+    console.log('step 1');
 
     // Check if password matches
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
+
+    console.log('step 2');
 
     // Generate token and send response
     const token = generateToken(user._id);
