@@ -8,4 +8,12 @@ export const createUser = (userData) => {
   return api.post('/users', userData);
 };
 
+export const createWorkflow = (workflowData) => {
+  return api.post('/workflows', workflowData);
+};
+
+export const getWorkflows = () => {
+  return api.get('/workflows');
+};
+
 // You would also add services for workflows, company expenses, etc.

@@ -23,3 +23,4 @@ export const rejectExpense = (expenseId, comment) => {
   // Hits the PUT /api/expenses/:id/reject route
   return api.put(`/expenses/${expenseId}/reject`, { comment });
 };
+
