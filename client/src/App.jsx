@@ -7,7 +7,7 @@ import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/routing/PrivateRoute'; // Import the new component
-
+import TeamReportPage from './pages/TeamReportPage';
 function App() {
   return (
     <Router>
@@ -21,7 +21,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
             <Route path="/dashboard" element={<DashboardPage />} />
-          
+           <Route path="/team-report" element={<TeamReportPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
