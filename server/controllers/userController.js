@@ -157,6 +157,23 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+// @desc    Get total number of users in the admin's company
+// @route   GET /api/users/count
+// @access  Private/Admin
+exports.getUsersCount = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments({ company: req.user.company });
+    
+    res.status(200).json({ 
+      totalUsers,
+      company: req.user.company
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error while fetching users count' });
+  }
+};
+
 // @desc    Delete a user
 // @route   DELETE /api/users/:id
 // @access  Private/Admin

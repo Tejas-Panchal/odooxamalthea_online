@@ -203,6 +203,96 @@ const updateExpenseStatus = async (req, res, newStatus) => {
     }
 };
 
+// @desc    Get total amount of approved expenses for the company
+// @route   GET /api/expenses/approved-total
+// @access  Private/Manager or Admin
+exports.getApprovedExpensesTotal = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user || !user.company) {
+      return res.status(404).json({ msg: 'User or company not found' });
+    }
+
+    // Aggregate approved expenses to get total amount
+    const result = await Expense.aggregate([
+      {
+        $match: {
+          company: user.company,
+          status: 'Approved'
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Get company currency for context
+    const company = await Company.findById(user.company);
+    const currency = company ? company.defaultCurrency : 'USD';
+
+    const responseData = {
+      totalAmount: result.length > 0 ? result[0].totalAmount : 0,
+      count: result.length > 0 ? result[0].count : 0,
+      currency: currency,
+      company: user.company
+    };
+
+    res.status(200).json(responseData);
+  } catch (error) {
+    console.error('Error in getApprovedExpensesTotal:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Get total amount of pending expenses for the company
+// @route   GET /api/expenses/pending-total
+// @access  Private/Manager or Admin
+exports.getPendingExpensesTotal = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user || !user.company) {
+      return res.status(404).json({ msg: 'User or company not found' });
+    }
+
+    // Aggregate pending expenses to get total amount
+    const result = await Expense.aggregate([
+      {
+        $match: {
+          company: user.company,
+          status: 'Pending'
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Get company currency for context
+    const company = await Company.findById(user.company);
+    const currency = company ? company.defaultCurrency : 'USD';
+
+    const responseData = {
+      totalAmount: result.length > 0 ? result[0].totalAmount : 0,
+      count: result.length > 0 ? result[0].count : 0,
+      currency: currency,
+      company: user.company
+    };
+
+    res.status(200).json(responseData);
+  } catch (error) {
+    console.error('Error in getPendingExpensesTotal:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // @desc    Scan a receipt and return extracted data
 // @route   POST /api/expenses/scan-receipt
 exports.scanReceipt = async (req, res) => {
