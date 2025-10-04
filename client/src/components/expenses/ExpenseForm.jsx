@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../common/Input';
 import Button from '../common/Button';
 
-const ExpenseForm = ({ onSubmit }) => {
+// It receives the 'onSubmit' function, 'isLoading' state, and 'defaultCurrency' from the parent
+const ExpenseForm = ({ onSubmit, isLoading, defaultCurrency }) => {
   const [expense, setExpense] = useState({
-    date: '',
+    date: new Date().toISOString().slice(0, 10),
     description: '',
     category: '',
     originalAmount: '',
-    originalCurrency: 'USD',
+    originalCurrency: defaultCurrency || 'USD',
   });
+
+  // This updates the form's currency if the prop changes
+  useEffect(() => {
+    setExpense(prev => ({ ...prev, originalCurrency: defaultCurrency || 'USD' }));
+  }, [defaultCurrency]);
 
   const handleChange = (e) => {
     setExpense({ ...expense, [e.target.name]: e.target.value });
@@ -17,22 +23,23 @@ const ExpenseForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(expense);
-    // Clear form after submission
-    setExpense({ date: '', description: '', category: '', originalAmount: '', originalCurrency: 'USD' });
+    onSubmit(expense); // This calls handleExpenseSubmit in the EmployeeDashboard
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-white rounded-lg shadow-md">
-      <h3 className="text-xl font-semibold mb-4">Submit New Expense</h3>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Input label="Date of Expense" type="date" name="date" value={expense.date} onChange={handleChange} required />
+      <Input label="Description" name="description" value={expense.description} onChange={handleChange} required placeholder="e.g., Lunch with Client" />
+      <Input label="Category" name="category" value={expense.category} onChange={handleChange} required placeholder="e.g., Meals" />
       <div className="grid grid-cols-2 gap-4">
-        <Input label="Date" type="date" name="date" value={expense.date} onChange={handleChange} />
-        <Input label="Description" name="description" value={expense.description} onChange={handleChange} />
-        <Input label="Category" name="category" value={expense.category} onChange={handleChange} />
-        <Input label="Amount" type="number" name="originalAmount" value={expense.originalAmount} onChange={handleChange} />
-        <Input label="Currency" name="originalCurrency" value={expense.originalCurrency} onChange={handleChange} />
+        <Input label="Amount" type="number" name="originalAmount" value={expense.originalAmount} onChange={handleChange} required placeholder="e.g., 55.00" />
+        <Input label="Currency" name="originalCurrency" value={expense.originalCurrency} onChange={handleChange} required />
       </div>
-      <Button type="submit" variant="primary">Submit Expense</Button>
+      <div className="pt-4">
+        <Button type="submit" variant="primary" disabled={isLoading} className="w-full">
+          {isLoading ? 'Submitting...' : 'Submit Expense'}
+        </Button>
+      </div>
     </form>
   );
 };
