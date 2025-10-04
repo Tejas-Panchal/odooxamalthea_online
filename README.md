@@ -1,26 +1,33 @@
-# odooxamalthea_online
+## Team Name: One Piece
+- Tejas Panchal
+- Purvanshu Machhi
+- Dhyeya Dawawala
+- Deep Patel
+
+Problem Statemnt : Expense Management
+
+- Reviewer : Aman Patel
+
+Video link : 
 
 ## Overview
-odooxamalthea_online is a web-based application built primarily with JavaScript (99.3%) designed to facilitate online management for Odoo X Amalthea events.
+odooExpenses is a web-based application built primarily with JavaScript designed to facilitate online management for company expenses.
 
 ## Features
 - Modern UI built with React and Vite
 - Hot Module Replacement (HMR) for rapid development
 - ESLint integration for code quality
-- [Add your key features here]
 
 ## Technologies Used
 - JavaScript
 - React
 - Vite
-- Babel/SWC (as per Vite plugins)
-- [Add other relevant technologies]
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (recommended version: X.X.X)
-- npm or yarn
+- Node.js
+- npm
 
 ### Installation
 ```bash
@@ -35,24 +42,9 @@ npm run dev
 ```
 
 ## Usage
-- Open your browser at `http://localhost:5173`
-- [Briefly describe how to use the app]
+- Open your browser at `http://localhost:5001`
+
 
 ## Folder Structure
 - `client/` — Frontend source code (React + Vite)
 - `README.md` — Project documentation
-- [List other important directories/files]
-
-## Contribution
-Contributions are welcome! To contribute:
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-[Specify your license, e.g., MIT. If you haven't added one, it is recommended to do so.]
-
-## Maintainers
-- [List main contributors if desired]
