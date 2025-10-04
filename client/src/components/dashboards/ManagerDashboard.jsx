@@ -44,7 +44,7 @@ const ManagerDashboard = () => {
         <Card title="Quick Actions">
           <div className="flex flex-col space-y-3">
             {/* These links would need corresponding routes set up in App.jsx */}
-            <Link to="/my-expenses" className="w-full text-center px-4 py-2 font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+            <Link to="/manager/my-expenses" className="w-full text-center px-4 py-2 font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
               View My Own Expenses
             </Link>
             <Link to="/team-report" className="w-full text-center px-4 py-2 font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">

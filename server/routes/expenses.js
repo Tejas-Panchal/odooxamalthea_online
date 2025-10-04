@@ -27,7 +27,7 @@ router.get('/debug/user', (req, res) => {
 });
 
 router.route("/").post(submitExpense);
-router.route("/my-expenses").get(authorize("Manager", "Admin"), getMyExpenses);
+router.route("/my-expenses").get(authorize("Employee","Manager", "Admin"), getMyExpenses);
 router.route("/pending-approval").get(authorize("Manager", "Admin"), getPendingApprovals);
 router.route("/pending-total").get(authorize("Manager", "Admin"), getPendingExpensesTotal);
 router.route("/approved-total").get(authorize("Manager", "Admin"), getApprovedExpensesTotal);

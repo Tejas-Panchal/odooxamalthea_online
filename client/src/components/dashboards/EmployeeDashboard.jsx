@@ -21,6 +21,7 @@ const EmployeeDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // This controls the pop-up
   const [isLoading, setIsLoading] = useState(false); // For showing a loading state on the submit button
   const [error, setError] = useState('');
+  const [totalAmount, setTotalAmount] = useState(0);
 
   // Determine the company's default currency from the logged-in user's data
   const companyCurrency = user?.company?.defaultCurrency || 'USD';
@@ -29,6 +30,9 @@ const EmployeeDashboard = () => {
   const fetchExpenses = async () => {
     try {
       const res = await getMyExpenses();
+      const totalamount = res.data.reduce((sum, expense) => sum + expense.amount, 0);
+      console.log("Total amount of my expenses:", totalamount);
+      setTotalAmount(totalamount);
       setExpenses(res.data);
     } catch (err) {
       console.error('Failed to fetch expenses');
@@ -88,7 +92,7 @@ const EmployeeDashboard = () => {
       {/* Quick Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <KpiCard title="PENDING" value={`${pendingCount} Expenses`} icon={ClockIcon} />
-        <KpiCard title="APPROVED (ALL TIME)" value={`$${approvedAmount.toFixed(2)}`} icon={CheckCircleIcon} />
+        <KpiCard title="APPROVED (ALL TIME)" value={totalAmount} icon={CheckCircleIcon} />
       </div>
 
       {/* Expense History Card */}

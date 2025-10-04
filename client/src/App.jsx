@@ -1,12 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
+import CreateUserPage from './components/admin/CreateUserPage'; // Import new page
+import CreateWorkflowPage from './components/admin/CreateWorkflowPage';
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/routing/PrivateRoute'; // Import the new component
+import MyExpense from './components/manager/MyExpense';
 
 function App() {
   return (
@@ -21,6 +23,10 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
             <Route path="/dashboard" element={<DashboardPage />} />
+
+            <Route path="/admin/users/create" element={<CreateUserPage />} />
+          <Route path="/admin/workflows/create" element={<CreateWorkflowPage />} />
+          <Route path="/manager/my-expenses" element={<MyExpense />} />
           
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
