@@ -13,7 +13,7 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <form onSubmit={handleSubmit} className="p-8 bg-white rounded-lg shadow-md w-96">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       <Input
         label="Email"
         type="email"

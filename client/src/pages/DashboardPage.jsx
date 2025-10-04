@@ -1,31 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import EmployeeDashboard from '../components/dashboards/EmployeeDashboard';
-// We would also import ManagerDashboard and AdminDashboard here
-
+import ManagerDashboard from '../components/dashboards/ManagerDashboard'; 
+import AdminDashboard from '../components/dashboards/AdminDashboard';   
+import Layout from '../components/layout/Layout';
 const DashboardPage = () => {
   // Logic to determine user role will go here later
+  const { user, logout } = useContext(AuthContext);
   const userRole = 'Employee'; // Mock role
 
-  const renderDashboardByRole = () => {
-    switch (userRole) {
+ const renderDashboardByRole = () => {
+    if (!user) return <h2>Loading...</h2>;
+
+    switch (user.role) {
       case 'Employee':
         return <EmployeeDashboard />;
       case 'Manager':
-        // return <ManagerDashboard />;
-        return <h2>Manager Dashboard</h2>;
+        return <ManagerDashboard />;
       case 'Admin':
-        // return <AdminDashboard />;
-        return <h2>Admin Dashboard</h2>;
+        return <AdminDashboard />;
       default:
-        return <h2>Welcome!</h2>;
+        return <h2>Invalid user role.</h2>;
     }
   };
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+    <Layout>
+    
         {renderDashboardByRole()}
-    </div>
+  
+    </Layout>
   );
 };
 
