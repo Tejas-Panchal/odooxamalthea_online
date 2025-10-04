@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import EmployeeDashboard from '../components/dashboards/EmployeeDashboard';
+import Layout from '../components/layout/Layout';
+import AdminDashboard from '../components/dashboards/AdminDashboard';
+
 // We would also import ManagerDashboard and AdminDashboard here
 
 const DashboardPage = () => {
-  // Logic to determine user role will go here later
-  const userRole = 'Employee'; // Mock role
+    const { user } = useContext(AuthContext);
+
 
  const renderDashboardByRole = () => {
     if (!user) return <h2>Loading...</h2>;

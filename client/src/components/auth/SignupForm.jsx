@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import { useNavigate } from 'react-router-dom';
+
 
 const SignupForm = ({ onSignup }) => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ const SignupForm = ({ onSignup }) => {
     companyName: '',
     currency: 'USD', // Default currency
   });
+    const navigator = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,7 +20,9 @@ const SignupForm = ({ onSignup }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("sbmitting");
     onSignup(formData);
+    navigator('/login');
   };
 
   return (

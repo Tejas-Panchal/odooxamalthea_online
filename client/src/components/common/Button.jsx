@@ -1,7 +1,9 @@
 
 import React from 'react';
 
-const Button = ({ children, onClick, type = 'button', variant = 'primary' }) => {
+
+
+const Button = ({ children, onClick, type, variant = 'primary' }) => {
   const baseStyle = 'px-4 py-2 rounded-md font-semibold focus:outline-none';
   const variantStyle = variant === 'primary' 
     ? 'bg-blue-500 text-white hover:bg-blue-600' 

@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import axios from 'axios'; 
+import { signupUser, loginUser, getLoggedInUser } from '../services/authService';
 
 // 1. Initial State
 const initialState = {

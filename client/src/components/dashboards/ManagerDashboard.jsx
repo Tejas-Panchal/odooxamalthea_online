@@ -1,54 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { getPendingExpenses, approveExpense, rejectExpense } from '../../services/expenseService';
-import PendingApprovalList from '../expenses/PendingApprovalList';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+// Component imports
+import ExpenseApprovalTable from '../expenses/ExpenseApprovalTable';
+import Card from '../common/Card';
 
 const ManagerDashboard = () => {
-  const [pendingExpenses, setPendingExpenses] = useState([]);
-
-  const fetchPending = async () => {
-    try {
-      const res = await getPendingExpenses();
-      setPendingExpenses(res.data);
-    } catch (err) {
-      console.error('Failed to fetch pending expenses');
-    }
-  };
-
-  useEffect(() => {
-    fetchPending();
-  }, []);
-
-  const handleApprove = async (expenseId) => {
-    const comment = prompt("Optional: Add a comment for approval");
-    try {
-      await approveExpense(expenseId, comment);
-      // Refresh the list after action
-      fetchPending();
-    } catch (err) {
-      console.error("Failed to approve expense");
-    }
-  };
-
-  const handleReject = async (expenseId) => {
-    const comment = prompt("Please provide a reason for rejection");
-    if (comment) { // Require a comment for rejection
-      try {
-        await rejectExpense(expenseId, comment);
-        // Refresh the list after action
-        fetchPending();
-      } catch (err) {
-        console.error("Failed to reject expense");
-      }
-    }
+  // Mock data for the Team Overview - in a real app, this would come from an API
+  const teamStats = {
+    totalPending: '$850.20',
+    avgClaim: '$75.00',
+    mostCommonCategory: 'Travel',
   };
 
   return (
-    <div>
-      <PendingApprovalList
-        expenses={pendingExpenses}
-        onApprove={handleApprove}
-        onReject={handleReject}
-      />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main content: Pending Approvals */}
+      <div className="lg:col-span-2">
+        <Card title="Pending Approvals">
+          <ExpenseApprovalTable />
+        </Card>
+      </div>
+
+      {/* Sidebar: Team Overview and Actions */}
+      <div className="space-y-8">
+        <Card title="Team Overview">
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Total Pending Amount</span>
+              <span className="font-semibold text-gray-800">{teamStats.totalPending}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Average Claim</span>
+              <span className="font-semibold text-gray-800">{teamStats.avgClaim}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Top Category</span>
+              <span className="font-semibold text-gray-800">{teamStats.mostCommonCategory}</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Quick Actions">
+          <div className="flex flex-col space-y-3">
+            {/* These links would need corresponding routes set up in App.jsx */}
+            <Link to="/my-expenses" className="w-full text-center px-4 py-2 font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+              View My Own Expenses
+            </Link>
+            <Link to="/team-report" className="w-full text-center px-4 py-2 font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+              View Full Team Report
+            </Link>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
