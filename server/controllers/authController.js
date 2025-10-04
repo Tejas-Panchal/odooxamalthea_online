@@ -11,11 +11,53 @@ const generateToken = (id) => {
   });
 };
 
+// Email helpers: normalization and validation
+const normalizeEmail = (email) => {
+  if (!email || typeof email !== 'string') return '';
+  return email.trim().toLowerCase();
+};
+
+// A reasonably strict email regex (based on HTML5 spec guidance)
+const isValidEmail = (email) => {
+  const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  return re.test(email);
+};
+
+// Password validation: length, complexity, blacklist, no spaces
+const isValidPassword = (password) => {
+  if (typeof password !== 'string') return false;
+  const pwd = password.trim();
+  if (pwd.length < 8 || pwd.length > 128) return false;
+  if (/\s/.test(pwd)) return false; // no spaces
+  const hasLower = /[a-z]/.test(pwd);
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasDigit = /\d/.test(pwd);
+  const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?`~]/.test(pwd);
+  const blacklist = new Set([
+    'password','123456','12345678','qwerty','qwerty123','111111','123123','abc123','password1','iloveyou','admin','welcome','letmein','monkey','dragon'
+  ]);
+  if (blacklist.has(pwd.toLowerCase())) return false;
+  return hasLower && hasUpper && hasDigit && hasSpecial;
+};
+
 // @desc    Register a new user and company (ONLY for the first user)
 // @route   POST /api/auth/signup
 // @access  Public
 exports.signup = async (req, res) => {
   const { name, email, password, companyName, currency } = req.body;
+
+  // Normalize and validate email early
+  const normalizedEmail = normalizeEmail(email);
+  if (!isValidEmail(normalizedEmail)) {
+    return res.status(400).json({ msg: 'Please provide a valid email address.' });
+  }
+
+  // Validate password strength
+  if (!isValidPassword(password)) {
+    return res.status(400).json({
+      msg: 'Weak password. Use 8+ chars with upper, lower, number, special; no spaces; avoid common passwords.'
+    });
+  }
 
   try {
     // This logic ensures that the public signup route is only available
@@ -24,7 +66,13 @@ exports.signup = async (req, res) => {
     if (userCount > 0) {
       return res.status(403).json({ msg: 'Public signup is disabled. An admin must create new accounts.' });
     }
-    console.log("step 1")
+
+    // Enforce uniqueness of email (defensive even if first signup)
+    const existing = await User.findOne({ email: normalizedEmail });
+    if (existing) {
+      return res.status(409).json({ msg: 'Email is already in use.' });
+    }
+
     // 1. Create the company
     const newCompany = await Company.create({
       name: companyName,
@@ -34,7 +82,7 @@ exports.signup = async (req, res) => {
     // 2. Create the Admin user
     const user = new User({
       name,
-      email,
+      email: normalizedEmail,
       password,
       role: 'Admin',
       company: newCompany._id,
@@ -56,6 +104,8 @@ exports.signup = async (req, res) => {
         role: user.role,
       },
     });
+
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error during signup' });
@@ -68,9 +118,14 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
+  const normalizedEmail = normalizeEmail(email);
+  if (!isValidEmail(normalizedEmail)) {
+    return res.status(400).json({ msg: 'Please provide a valid email address.' });
+  }
+
   try {
     // Check for user
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
     if (!user) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }

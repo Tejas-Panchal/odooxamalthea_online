@@ -1,18 +1,55 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+// Email helpers: normalization and validation (keep consistent with authController)
+const normalizeEmail = (email) => {
+  if (!email || typeof email !== 'string') return '';
+  return email.trim().toLowerCase();
+};
+
+const isValidEmail = (email) => {
+  const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  return re.test(email);
+};
+
+// Password validation (aligned with authController)
+const isValidPassword = (password) => {
+  if (typeof password !== 'string') return false;
+  const pwd = password.trim();
+  if (pwd.length < 8 || pwd.length > 128) return false;
+  if (/\s/.test(pwd)) return false; // no spaces
+  const hasLower = /[a-z]/.test(pwd);
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasDigit = /\d/.test(pwd);
+  const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?`~]/.test(pwd);
+  const blacklist = new Set([
+    'password','123456','12345678','qwerty','qwerty123','111111','123123','abc123','password1','iloveyou','admin','welcome','letmein','monkey','dragon'
+  ]);
+  if (blacklist.has(pwd.toLowerCase())) return false;
+  return hasLower && hasUpper && hasDigit && hasSpecial;
+};
+
 // @desc    Create a new user (by Admin)
 // @route   POST /api/users
 // @access  Private/Admin
 exports.createUser = async (req, res) => {
   const { name, email, password, role, managerId } = req.body;
+  const normalizedEmail = normalizeEmail(email);
+  if (!isValidEmail(normalizedEmail)) {
+    return res.status(400).json({ msg: 'Please provide a valid email address.' });
+  }
+  if (!isValidPassword(password)) {
+    return res.status(400).json({
+      msg: 'Weak password. Use 8+ chars with upper, lower, number, special; no spaces; avoid common passwords.'
+    });
+  }
   
   // The admin user is available from the 'protect' middleware (req.user)
   const admin = req.user;
 
   try {
     // Check if user with that email already exists
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email: normalizedEmail });
     if (user) {
       return res.status(400).json({ msg: 'User with this email already exists' });
     }
@@ -27,7 +64,7 @@ exports.createUser = async (req, res) => {
 
     user = new User({
       name,
-      email,
+      email: normalizedEmail,
       password,
       role, // 'Employee' or 'Manager'
       company: admin.company, // Assign to the admin's company
