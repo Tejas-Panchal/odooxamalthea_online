@@ -4,7 +4,7 @@ import React from 'react';
 import UsersIcon from '../icons/UsersIcon';
 import CircleStackIcon from '../icons/CircleStackIcon';
 
-
+import ManagerExpenseWidget from '../admin/ManagerExpenseWidget';
 // Other component imports
 import KpiCard from '../common/KpiCard';
 import Card from '../common/Card';
@@ -39,6 +39,10 @@ const AdminDashboard = () => {
         <div className="lg:col-span-2">
           <Card title="Approval Workflows">
             <ApprovalRuleConfig />
+          </Card>
+           {/* ADD THE NEW WIDGET HERE */}
+          <Card title="Team Expense Totals">
+            <ManagerExpenseWidget />
           </Card>
         </div>
       </div>

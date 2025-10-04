@@ -8,3 +8,4 @@ export { default as UploadIcon } from './UploadIcon';
 export { default as UsersIcon } from './UsersIcon';
 export { default as XCircleIcon } from './XCircleIcon';
 export { default as XMarkIcon } from './XMarkIcon';
+export { default as DownloadIcon } from './DownloadIcon'; 
