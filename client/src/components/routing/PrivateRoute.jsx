@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useContext } from 'react';
 
 const useAuth = () => {
   const isAuthenticated = true;
