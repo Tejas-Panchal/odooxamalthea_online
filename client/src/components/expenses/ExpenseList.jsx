@@ -1,45 +1,50 @@
 import React from 'react';
+// Corrected imports
+import ClockIcon from '../icons/ClockIcon';
+import CheckCircleIcon from '../icons/CheckCircleIcon';
+import XCircleIcon from '../icons/XCircleIcon';
 
-// A single row in the list
-const ExpenseItem = ({ expense }) => (
-  <tr className="border-b hover:bg-gray-50">
-    <td className="p-3">{new Date(expense.date).toLocaleDateString()}</td>
-    <td className="p-3">{expense.description}</td>
-    <td className="p-3">{expense.category}</td>
-    <td className="p-3 text-right">{`${expense.originalAmount} ${expense.originalCurrency}`}</td>
-    <td className="p-3">
-      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-    expense.status === 'Approved' ? 'bg-green-100 text-green-800' :
-    expense.status === 'Rejected' ? 'bg-red-100 text-red-800' :
-    'bg-yellow-100 text-yellow-800'
-}`}>
-    {expense.status}
-</span>
-    </td>
-  </tr>
-);
-
-// The full list component
-const ExpenseList = ({ expenses }) => {
+const StatusBadge = ({ status }) => {
+  const statusConfig = {
+    Pending: { icon: ClockIcon, text: 'Pending', classes: 'bg-amber-100 text-amber-800', iconColor: 'text-amber-500' },
+    Approved: { icon: CheckCircleIcon, text: 'Approved', classes: 'bg-green-100 text-green-800', iconColor: 'text-green-500' },
+    Rejected: { icon: XCircleIcon, text: 'Rejected', classes: 'bg-red-100 text-red-800', iconColor: 'text-red-500' },
+  };
+  const { icon: Icon, text, classes, iconColor } = statusConfig[status] || statusConfig.Pending;
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-semibold mb-4">My Expenses</h3>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${classes}`}>
+      <Icon className={`-ml-0.5 mr-1.5 h-4 w-4 ${iconColor}`} />
+      {text}
+    </span>
+  );
+};
+
+const ExpenseList = ({ expenses }) => {
+  // ... rest of the component is the same
+  return (
+    <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="bg-gray-100 border-b">
-            <th className="p-3 text-left text-sm font-semibold text-gray-600 uppercase">Date</th>
-            <th className="p-3 text-left text-sm font-semibold text-gray-600 uppercase">Description</th>
-            <th className="p-3 text-left text-sm font-semibold text-gray-600 uppercase">Category</th>
-            <th className="p-3 text-left text-sm font-semibold text-gray-600 uppercase text-right">Amount</th>
-            <th className="p-3 text-left text-sm font-semibold text-gray-600 uppercase">Status</th>
+          <tr className="bg-gray-50 border-b">
+            <th className="p-3 text-sm font-semibold text-gray-600 uppercase">Date</th>
+            <th className="p-3 text-sm font-semibold text-gray-600 uppercase">Description</th>
+            <th className="p-3 text-sm font-semibold text-gray-600 uppercase text-right">Amount</th>
+            <th className="p-3 text-sm font-semibold text-gray-600 uppercase">Status</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200">
           {expenses && expenses.length > 0 ? (
-            expenses.map(exp => <ExpenseItem key={exp._id} expense={exp} />)
+            expenses.map(exp => (
+              <tr key={exp._id} className="hover:bg-gray-50">
+                <td className="p-3 text-sm text-gray-700">{new Date(exp.date).toLocaleDateString()}</td>
+                <td className="p-3 font-medium text-gray-800">{exp.description}</td>
+                <td className="p-3 text-sm text-gray-700 text-right">{`${exp.originalAmount.toFixed(2)} ${exp.originalCurrency}`}</td>
+                <td className="p-3"><StatusBadge status={exp.status} /></td>
+              </tr>
+            ))
           ) : (
-            <tr className="border-b hover:bg-gray-50">
-              <td colSpan="5" className="p-3 text-center text-gray-500">No expenses found.</td>
+            <tr>
+              <td colSpan="4" className="p-4 text-center text-gray-500">You haven't submitted any expenses yet.</td>
             </tr>
           )}
         </tbody>
