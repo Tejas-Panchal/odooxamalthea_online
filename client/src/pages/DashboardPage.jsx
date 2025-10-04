@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import EmployeeDashboard from '../components/dashboards/EmployeeDashboard';
 import Layout from '../components/layout/Layout';
 import AdminDashboard from '../components/dashboards/AdminDashboard';
+import ManagerDashboard from '../components/dashboards/ManagerDashboard';
 
 // We would also import ManagerDashboard and AdminDashboard here
 
