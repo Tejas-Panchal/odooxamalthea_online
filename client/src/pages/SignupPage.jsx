@@ -1,12 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SignupForm from '../components/auth/SignupForm';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const SignupPage = () => {
-  const handleSignup = (signupData) => {
-    console.log('Signing up with:', signupData);
-    // API call for signup will go here
-  };
+  const { signup } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [error, setError] = useState('');
+
+    const handleSignup = async (signupData) => {
+        try {
+            await signup(signupData);
+            navigate('/dashboard');
+        } catch (err) {
+            setError('Signup failed. Please try again.');
+        }
+    };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

@@ -1,10 +1,23 @@
 import React from 'react';
 import EmployeeDashboard from '../components/dashboards/EmployeeDashboard';
-// We would also import ManagerDashboard and AdminDashboard here
+import { AuthContext } from '../context/AuthContext';
+import ManagerDashboard from '../components/dashboards/ManagerDashboard'; 
+import AdminDashboard from '../components/dashboards/AdminDashboard';
+import { AuthContext } from '../context/AuthContext'
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const DashboardPage = () => {
-  // Logic to determine user role will go here later
-  const userRole = 'Employee'; // Mock role
+  const userRole = 'Employee'; 
+
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redirect after logout
+  };
 
   const renderDashboardByRole = () => {
     switch (userRole) {
@@ -23,7 +36,15 @@ const DashboardPage = () => {
 
   return (
     <div className="container mx-auto p-4 md:p-8">
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+        <header className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
+        </header>
         {renderDashboardByRole()}
     </div>
   );
