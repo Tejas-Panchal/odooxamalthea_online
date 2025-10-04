@@ -1,24 +1,40 @@
 import React from 'react';
 import ExpenseForm from '../expenses/ExpenseForm';
 import ExpenseList from '../expenses/ExpenseList';
+import { submitExpense, getMyExpenses } from '../../services/expenseService';
+import { useState, useEffect } from 'react';
+
 
 // This component will manage fetching and submitting expenses.
 // For now, it just lays out the UI.
 const EmployeeDashboard = () => {
-  const mockExpenses = [
-    { _id: 1, date: '2023-10-27', description: 'Client Lunch', category: 'Meals', originalAmount: 55.00, originalCurrency: 'USD', status: 'Pending' },
-    { _id: 2, date: '2023-10-25', description: 'Taxi to Airport', category: 'Travel', originalAmount: 30.00, originalCurrency: 'USD', status: 'Approved' },
-  ];
+  const [expenses, setExpenses] = useState([]);
 
-  const handleExpenseSubmit = (expenseData) => {
-    console.log('Submitting expense:', expenseData);
-    // API call to submit expense will go here
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const res = await getMyExpenses();
+        setExpenses(res.data);
+      } catch (err) {
+        console.error('Failed to fetch expenses');
+      }
+    };
+    fetchExpenses();
+  }, []);
+
+  const handleExpenseSubmit = async (expenseData) => {
+    try {
+      const res = await submitExpense(expenseData);
+      setExpenses([res.data, ...expenses]); // Add new expense to the top of the list
+    } catch (err) {
+      console.error('Failed to submit expense');
+    }
   };
 
   return (
     <div className="space-y-8">
       <ExpenseForm onSubmit={handleExpenseSubmit} />
-      <ExpenseList expenses={mockExpenses} />
+      <ExpenseList expenses={expenses} />
     </div>
   );
 };

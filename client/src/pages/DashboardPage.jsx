@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import EmployeeDashboard from '../components/dashboards/EmployeeDashboard';
-import ManagerDashboard from '../components/dashboards/ManagerDashboard'; 
-import AdminDashboard from '../components/dashboards/AdminDashboard';   
-import Layout from '../components/layout/Layout';
+// We would also import ManagerDashboard and AdminDashboard here
+
 const DashboardPage = () => {
   // Logic to determine user role will go here later
-  const { user, logout } = useContext(AuthContext);
   const userRole = 'Employee'; // Mock role
 
  const renderDashboardByRole = () => {
@@ -25,8 +23,8 @@ const DashboardPage = () => {
   };
 
   return (
-    <Layout>
-    
+    <div className="container mx-auto p-4 md:p-8">
+        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
         {renderDashboardByRole()}
   
     </Layout>
