@@ -8,7 +8,7 @@ Problem Statemnt : Expense Management
 
 - Reviewer : Aman Patel
 
-Video link : 
+Video link : [https://drive.google.com/drive/folders/1YVlG_jKXMHnK8-_HkpwfBPLlQjgOuOq4?usp=drive_link]
 
 ## Overview
 odooExpenses is a web-based application built primarily with JavaScript designed to facilitate online management for company expenses.
