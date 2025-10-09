@@ -9,6 +9,8 @@ const {
   approveExpense,
   rejectExpense,
   scanReceipt,
+  getPendingExpensesTotal,
+  getApprovedExpensesTotal,
 } = require("../controllers/expenseController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 const upload = multer({ dest: 'uploads/' });
@@ -25,8 +27,10 @@ router.get('/debug/user', (req, res) => {
 });
 
 router.route("/").post(submitExpense);
-router.route("/my-expenses").get(authorize("Manager", "Admin"), getMyExpenses);
+router.route("/my-expenses").get(authorize("Employee","Manager", "Admin"), getMyExpenses);
 router.route("/pending-approval").get(authorize("Manager", "Admin"), getPendingApprovals);
+router.route("/pending-total").get(authorize("Manager", "Admin"), getPendingExpensesTotal);
+router.route("/approved-total").get(authorize("Manager", "Admin"), getApprovedExpensesTotal);
 router.route("/company").get(authorize("Manager", "Admin"), getCompanyExpenses);
 router.route("/:id/approve").put(authorize("Manager", "Admin"), approveExpense);
 router.route("/:id/reject").put(authorize("Manager", "Admin"), rejectExpense);

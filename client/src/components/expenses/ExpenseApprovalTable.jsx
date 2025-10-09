@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getPendingExpenses } from '../../services/expenseService';
 
-// Mock service
-const mockExpenseService = {
-  getPendingExpenses: async () => Promise.resolve({ data: [
-    { _id: '1', submittedBy: { name: 'John Doe' }, date: new Date(), description: 'Client Dinner', amount: 150.00, company: { defaultCurrency: 'USD' } }
-  ] }),
-};
 
 const ExpenseApprovalTable = () => {
   const [pendingExpenses, setPendingExpenses] = useState([]);
@@ -14,9 +9,10 @@ const ExpenseApprovalTable = () => {
   useEffect(() => {
     const fetchPending = async () => {
       setLoading(true);
-      const res = await mockExpenseService.getPendingExpenses();
+      const res = await getPendingExpenses();
       setPendingExpenses(res.data);
       setLoading(false);
+      console.log(res.data)
     };
     fetchPending();
   }, []);

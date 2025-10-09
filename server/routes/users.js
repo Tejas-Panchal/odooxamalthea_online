@@ -5,7 +5,8 @@ const {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUsersCount
 } = require('../controllers/userController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -13,6 +14,9 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 // This ensures that only authenticated Admins can access these endpoints.
 router.use(protect);
 router.use(authorize('Admin'));
+
+// Get total users count
+router.get('/count', getUsersCount);
 
 // Chained routes for cleaner code
 router.route('/')
